@@ -1,0 +1,207 @@
+﻿<controls:MetroWindow x:Class="FileManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:local="clr-namespace:FileManager"
+                      xmlns:models="clr-namespace:FileManager.Models"
+        mc:Ignorable="d"
+        Title="File Manager" Height="550" Width="650">
+
+    <Grid>
+
+        <TabControl Margin="10" >
+            <TabItem Name="TbitemSelection" Header="Selection" >
+
+                <Grid  >
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="7*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <TreeView Name="Plant" ItemsSource="{Binding}"  SelectedItemChanged="Plant_OnSelectedItemChanged" Grid.Column="0"  Margin="5,20,2,5" BorderThickness="1">
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                                <Setter Property="IsExpanded" Value="{Binding Expanded}"/>
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                        <TreeView.Resources>
+                            <DataTemplate x:Key="UnitsTemplate" DataType="models:Unit" >
+                                <StackPanel Orientation="Horizontal" ToolTip="{Binding Description}" Margin="7">
+                                    <Image Source="/Icons/unit2.jpg" Margin="0,0,5,0" />
+                                    <TextBlock TextDecorations="Underline" ToolTip="{Binding Name}" Text="{Binding Description}" Padding="2,0,0,0" FontSize="15" 
+                                    >
+                                        <TextBlock.InputBindings>
+                                            <MouseBinding MouseAction="LeftDoubleClick"
+                                                          Command="{Binding RelativeSource={RelativeSource FindAncestor, 
+                        AncestorType={x:Type Window}}, Path=DataContext.Exec}"
+                                                          CommandParameter="{Binding}"/>
+                                        </TextBlock.InputBindings>
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect RenderOptions.ClearTypeHint="Enabled"
+                                                              ShadowDepth="0"
+                                                              Direction="330"
+                                                              Color="Black"
+                                                              Opacity="0.75"
+                                                              BlurRadius="2"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                            <HierarchicalDataTemplate x:Key="AreaTemplate" ItemsSource="{Binding Path=Units}" ItemTemplate="{StaticResource ResourceKey=UnitsTemplate}"
+                                                      DataType="models:Area">
+                                <StackPanel Orientation="Horizontal" ToolTip="{Binding Description}" Margin="5">
+                                    <Image Source="/Icons/Area2.jpg" Margin="0,0,5,0" />
+                                    <TextBlock TextDecorations="Underline" ToolTip="{Binding Name}" Text="{Binding Description}" Padding="2,0,0,0" FontSize="18" 
+                                    >
+                                        <TextBlock.InputBindings>
+                                            <MouseBinding MouseAction="LeftDoubleClick"
+                                                          Command="{Binding RelativeSource={RelativeSource FindAncestor, 
+                        AncestorType={x:Type Window}}, Path=DataContext.Exec}"
+                                                          CommandParameter="{Binding}"/>
+                                        </TextBlock.InputBindings>
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect RenderOptions.ClearTypeHint="Enabled"
+                                                              ShadowDepth="0"
+                                                              Direction="330"
+                                                              Color="Black"
+                                                              Opacity="0.75"
+                                                              BlurRadius="2"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.Resources>
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Path=Areas}" ItemTemplate="{StaticResource ResourceKey=AreaTemplate}"
+                                                      DataType="models:Plant" >
+                                <StackPanel Orientation="Horizontal" ToolTip="{Binding Description}" Margin="7">
+                                    <Image Source="/Icons/plant.jpg" Margin="0,0,5,0" />
+                                    <TextBlock TextDecorations="Underline" ToolTip="{Binding Name}" Text="{Binding Name}" Padding="2,0,0,0" FontSize="20" 
+                                               >
+                                        <TextBlock.InputBindings>
+                                            <MouseBinding MouseAction="LeftDoubleClick"
+                                                          Command="{Binding RelativeSource={RelativeSource FindAncestor, 
+                        AncestorType={x:Type Window}}, Path=DataContext.Exec}"
+                                                          CommandParameter="{Binding}"/>
+                                        </TextBlock.InputBindings>
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect RenderOptions.ClearTypeHint="Enabled"
+                                                              ShadowDepth="0"
+                                                              Direction="330"
+                                                              Color="Black"
+                                                              Opacity="0.75"
+                                                              BlurRadius="2"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+
+                    <Grid Grid.Column="1" >
+                        <Grid.RowDefinitions>
+
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="6*"/>
+                        </Grid.ColumnDefinitions>
+
+
+
+                        <TabControl Margin="10" BorderBrush="Gainsboro" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+
+                            <TabItem Name="BrowseByTags" Header="Tag Nos..">
+
+                                <ComboBox Height="30"  HorizontalAlignment="Left" VerticalAlignment="Top" Name="ddltags" IsEditable="True" IsTextSearchEnabled="True" StaysOpenOnEdit="True" Width="400"  Margin="10">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate DataType="models:Tag">
+                                            <CheckBox Name="chkTag" Width="450" Content="{Binding Name}" IsChecked="{Binding Check_Status}" CommandParameter="{Binding Name}">
+                                            </CheckBox>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </TabItem>
+
+
+                            <TabItem Name="BrowseByDocs" Header="Doc Nos...">
+
+                                <ComboBox Height="30"  HorizontalAlignment="Left" VerticalAlignment="Top" Name="ddldocs" IsEditable="True" IsTextSearchEnabled="True" StaysOpenOnEdit="True" Width="400"  Margin="10">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate DataType="models:DMSVersion">
+                                            <CheckBox Name="chkDoc" Width="450" Content="{Binding Name}" IsChecked="{Binding Check_Status}" CommandParameter="{Binding Name}">
+                                            </CheckBox>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </TabItem>
+
+
+                        </TabControl>
+                        <TextBox HorizontalAlignment="Stretch"  Height="35" Margin="20" TextWrapping="Wrap"   Grid.Row="1" Grid.Column="1"  
+                             Text="TextBox" VerticalAlignment="Stretch"  MinWidth="300"  Name="FileNameTextBox"/>
+                        <Button x:Name="BrowseButton"  Content="Browse a file"  Grid.Row="1"  Grid.Column="0"
+                            Margin="20" Height="35"  Click="BrowseButton_Click"  />
+
+                        <Button x:Name="ProcessButton" Content="Process File Copy ...." HorizontalAlignment="Center"   Grid.Row="2"  Grid.Column="0" Grid.ColumnSpan="2"
+                            Margin="20" VerticalAlignment="Bottom"  Click="ProcessButton_OnClickButton_Click"    MinWidth="175" 
+                            FontSize="25" Height="50"/>
+                    </Grid>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Name="Settings" Header="Settings" IsSelected="True">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0"  Margin="5" FontSize="18" FontFamily="Georgia"
+
+                           FontWeight="Bold" >Vault Path</Label>
+                    <TextBox HorizontalAlignment="Stretch"  Height="35"  TextWrapping="Wrap"   Grid.Row="0" Grid.Column="1"  Margin="5"
+                         Text="TextBox" VerticalAlignment="Stretch"  MinWidth="300"  Name="VaultTextBox"/>
+                    <Button x:Name="VaultBrowseButton"  Content="Browse..."  Grid.Row="0"  Grid.Column="2" Margin="5"
+                       Height="35"  Click="VaultBrowseButton_Click"  />
+
+                    <Label Grid.Row="1" Grid.Column="0" FontSize="15" FontFamily="Georgia" Margin="15">Info About tool</Label>
+                    <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="15" FontFamily="Georgia" FontSize="15"
+                        Name="tbMultiLine"
+                        TextWrapping="Wrap"
+                        AcceptsReturn="True"
+                        VerticalScrollBarVisibility="Visible">
+                        Work to be done: 
+                        •	All these all plant specific and this tool needs to configure this accordingly so it needs significant amount of work for each custom schema.
+                        •	If you would like to use for multiple Tag Classdef’s name Doc Classdef’s names then the work associated with this will change.
+
+                        Next Release: We will make it configurable to cover all these above problems but for now we are in the concept phase with sample data.
+                    </TextBox>
+
+                    <Button x:Name="LoadData"  Content="Load plant data..."  Grid.Row="2"  Grid.Column="2" Margin="5"
+                       Height="35"  Click="LoadDataClick"  />
+
+                    <Button x:Name="TestConnection"  Content="Test db connection"  Grid.Row="2"  Grid.Column="1" Margin="5"
+                            Height="35"  Click="TestDatabaseConnectionClicked"  />
+
+                </Grid>
+
+            </TabItem>
+
+        </TabControl>
+
+    </Grid>
+</controls:MetroWindow>
+
