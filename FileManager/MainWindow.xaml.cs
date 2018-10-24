@@ -1,14 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using FileManager.Database;
 using FileManager.Models;
+using log4net;
+using log4net.Config;
 using MahApps.Metro.Controls;
 using Path = System.IO.Path;
 
 namespace FileManager
 {
+
+    private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -20,162 +26,12 @@ namespace FileManager
         public MainWindow()
         {
             InitializeComponent();
-            Tags=new List<Tag>();
+            XmlConfigurator.Configure();
+            Tags =new List<Tag>();
             Docs=new List<DMSVersion>();
             AddElementsInList();
             BindDummyDataForDropDown();
         }
-
-        //private void AddElementsInList()
-        //{
-        //    Tags.Add(new Tag()
-        //    {
-        //        Check_Status = false, Description = "PlantA-AreaA-UnitA-0001-IKEA", ID = "PlantA-AreaA-UnitA-0001-IKEA", Name = "PlantA-AreaA-UnitA-0001-IKEA",
-        //        Files = new List<IDMSFile>()
-        //        {
-        //            new DMSFile()
-        //            {
-        //                Name = "IKEA Store Hyd",
-        //                FilePath = "IKEA.jpg",
-        //                Description = "IKEA-02-A1"
-        //            }
-        //        }
-        //    });
-        //    Tags.Add(new Tag()
-        //    {
-        //        Check_Status = false, Description = "PlantA-AreaA-UnitA-0002-MetroHyd", ID = "PlantA-AreaA-UnitA-0002-MetroHyd", Name = "PlantA-AreaA-UnitA-0002-MetroHyd",
-        //        Files = new List<IDMSFile>()
-        //        {
-        //            new DMSFile()
-        //            {
-        //                Name = "MetroHyd structure",
-        //                FilePath = "Metro.jpg",
-        //                Description = "L&TMetroHYD-02-A1"
-        //            }
-        //        }
-        //    });
-        //    Tags.Add(new Tag()
-        //    {
-        //        Check_Status = false, Description = "PlantA-AreaA-UnitA-0003-P&GPlantHyd", ID = "PlantA-AreaA-UnitA-0003-P&GPlantHyd", Name = "PlantA-AreaA-UnitA-0003-P&GPlantHyd",
-        //        Files = new List<IDMSFile>()
-        //        {
-        //            new DMSFile()
-        //            {
-        //                Name = "P&GPlantHyd",
-        //                FilePath = "P&G to build largest Indian plant in Hyderabad - The Economic Times.pdf",
-        //                Description = "P&GPlantHyd-03-A2"
-        //            }
-        //        }
-        //    });
-        //    Tags.Add(new Tag()
-        //    {
-        //        Check_Status = false, Description = "PlantA-AreaA-UnitA-0004-RGIATopView", ID = "PlantA-AreaA-UnitA-0004-RGIATopView", Name = "PlantA-AreaA-UnitA-0004-RGIATopView",
-        //        Files = new List<IDMSFile>()
-        //        {
-        //            new DMSFile()
-        //            {
-        //                Name = "RGIATopView",
-        //                FilePath = "RGIA.jpg",
-        //                Description = "RGIA-view-01-B1"
-        //            }
-        //        }
-        //    });
-        //    Tags.Add(new Tag()
-        //    {
-        //        Check_Status = false, Description = "PlantA-AreaA-UnitA-0005-HydBusiness", ID = "PlantA-AreaA-UnitA-0005-HydBusiness", Name = "PlantA-AreaA-UnitA-0005-HydBusiness",
-        //        Files = new List<IDMSFile>()
-        //        {
-        //            new DMSFile()
-        //            {
-        //                Name = "HydBusiness-01-C1",
-        //                FilePath = "StockUpdate.jpg",
-        //                Description = "HydBusiness-01-C1"
-        //            }
-        //        }
-        //    });
-
-
-        //    Docs.Add(new DMSVersion()
-        //    {
-        //        Check_Status = false,
-        //        Description = "PlantA-AreaA-UnitA-0001-IKEA Design Doc",
-        //        ID = "PlantA-AreaA-UnitA-0001-IKEA",
-        //        Name = "PlantA-AreaA-UnitA-0001-IKEA Design Doc",
-        //        Files = new List<IDMSFile>()
-        //        {
-        //            new DMSFile()
-        //            {
-        //                Name = "IKEA Store Hyd",
-        //                FilePath = "IKEA.jpg",
-        //                Description = "IKEA-02-A1"
-        //            }
-        //        }
-        //    });
-        //    Docs.Add(new DMSVersion()
-        //    {
-        //        Check_Status = false,
-        //        Description = "PlantA-AreaA-UnitA-0002-MetroHyd Layout Design",
-        //        ID = "PlantA-AreaA-UnitA-0002-MetroHyd",
-        //        Name = "PlantA-AreaA-UnitA-0002-MetroHyd Layout Design",
-        //        Files = new List<IDMSFile>()
-        //        {
-        //            new DMSFile()
-        //            {
-        //                Name = "MetroHyd structure",
-        //                FilePath = "Metro.jpg",
-        //                Description = "L&TMetroHYD-02-A1"
-        //            }
-        //        }
-        //    });
-        //    Docs.Add(new DMSVersion()
-        //    {
-        //        Check_Status = false,
-        //        Description = "PlantA-AreaA-UnitA-0003-P&GPlantHyd P&ID Design ",
-        //        ID = "PlantA-AreaA-UnitA-0003-P&GPlantHyd",
-        //        Name = "PlantA-AreaA-UnitA-0003-P&GPlantHyd P&ID Design",
-        //        Files = new List<IDMSFile>()
-        //        {
-        //            new DMSFile()
-        //            {
-        //                Name = "P&GPlantHyd",
-        //                FilePath = "P&G to build largest Indian plant in Hyderabad - The Economic Times.pdf",
-        //                Description = "P&GPlantHyd-03-A2"
-        //            }
-        //        }
-        //    });
-        //    Docs.Add(new DMSVersion()
-        //    {
-        //        Check_Status = false,
-        //        Description = "PlantA-AreaA-UnitA-0004-RGIA SPI Loop",
-        //        ID = "PlantA-AreaA-UnitA-0004-RGIATopView",
-        //        Name = "PlantA-AreaA-UnitA-0004-RGIA SPI Loop",
-        //        Files = new List<IDMSFile>()
-        //        {
-        //            new DMSFile()
-        //            {
-        //                Name = "RGIATopView",
-        //                FilePath = "RGIA.jpg",
-        //                Description = "RGIA-view-01-B1"
-        //            }
-        //        }
-        //    });
-        //    Docs.Add(new DMSVersion()
-        //    {
-        //        Check_Status = false,
-        //        Description = "PlantA-AreaA-UnitA-0005-PO Invoice Status doc",
-        //        ID = "PlantA-AreaA-UnitA-0005-HydBusiness",
-        //        Name = "PlantA-AreaA-UnitA-0005-PO Invoice Status doc",
-        //        Files = new List<IDMSFile>()
-        //        {
-        //            new DMSFile()
-        //            {
-        //                Name = "HydBusiness-01-C1",
-        //                FilePath = "StockUpdate.jpg",
-        //                Description = "HydBusiness-01-C1"
-        //            }
-        //        }
-        //    });
-        //}
 
         private void AddElementsInList()
         {
